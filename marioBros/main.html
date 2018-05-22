@@ -1,0 +1,94 @@
+<html>
+<body>
+<canvas id=boxes style="position:absolute;z-index:0"></canvas>
+<canvas id=canvas style="position:absolute;z-index:1"></canvas>
+<script src="functions.js"></script>
+<script>
+var canvas=document.getElementById("canvas"),
+ctx=canvas.getContext("2d");
+canvas.width=640;
+canvas.height=480;
+canvas.style.border="solid black";
+var boxes=document.getElementById("boxes"),
+boxctx=boxes.getContext("2d");
+boxes.width=640;
+boxes.height=480;
+</script>
+<script src="levels.js"></script>
+<script>
+var gravity=0.1;
+var speed=3;
+var acceleration=0.8;
+var friction=0.9;
+var keysPressed=[false,false,false];
+document.addEventListener("keydown",function(e){
+	if(e.keyCode==39){alert();
+		keysPressed[0]=true;
+		}
+	if(e.keyCode==37){
+		keysPressed[1]=true;
+	}
+	if(e.keyCode==32){
+		keysPressed[2]=true;
+	}
+	
+});
+/*document.addEventListener("keyup",function(e){
+	if(e.keyCode==39){
+		keysPressed[0]=false;
+		}
+	if(e.keyCode==37){
+		keysPressed[1]=false;
+	}
+	if(e.keyCode==32){
+		keysPressed[2]=false;
+	}
+	
+});*/
+
+var boxes=[];
+for(t in boxPos){
+	boxes[t]=new Box(boxPos[t][0],boxPos[t][1]);
+	drawRect(boxes[t]);
+	}
+	
+var player= new Sprite(ctx,0,0,30,40,"red");
+player.vx=0;
+player.vy=0;
+player.isJumping=false;
+function changeStates(){
+
+	if(keysPressed[0]){
+		if(player.vx<speed)
+		player.vx+=acceleration;
+	}
+	if(keysPressed[1]){
+		if(player.vx>-speed)
+		player.vx+=-acceleration;
+	}
+	if(keysPressed[2]){
+		player.isJumping=true;
+		player.vy=-5;
+	}
+	player.y+=player.vy;
+	player.x+=player.vx;
+	if(Math.abs(player.vx)>0.01){
+	player.vx*=friction;
+	}
+	player.vy+=gravity;
+	if(player.x>canvas.width)player.x=0;
+	if(player.x<0-player.width)player.x=canvas.width;
+	if(player.y>=canvas.height-player.height-40)player.y=canvas.height-player.height-40;
+}
+
+function update(){
+	ctx.clearRect(0,0,canvas.width,canvas.height);
+	changeStates();
+	console.log(keysPressed[0]);
+	drawRect(player);
+	window.requestAnimationFrame(update);
+}
+update();
+</script>
+</body>
+</html>

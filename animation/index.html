@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<body>
+	<canvas id="sheet" style="border: solid"></canvas>
+	<canvas id="main" style="border: solid"></canvas>
+	<script>
+	var spriteAnimation=document.getElementById("sheet");
+	var spriteCtx=spriteAnimation.getContext("2d");
+	var canvas=document.getElementById("main");
+	var ctx=canvas.getContext("2d");
+	
+	var img=new Image();
+	img.src="ash2.gif";
+	var currentFrame=0;
+	var totalFrames=3;
+	var fps=3;
+	var frameWidth=330/19;
+	var frameHeight=139/6;
+	spriteAnimation.width=totalFrames*frameWidth;
+	spriteAnimation.height=frameHeight;
+	
+	function main(){
+		spriteCtx.drawImage(img,170-4*frameWidth,0*frameHeight+4,totalFrames*frameWidth,frameHeight,0,0,totalFrames*frameWidth,frameHeight);
+		var currentTime=0;
+		var previousTime=0;
+		var delTime=0
+	
+	function draw(){
+		ctx.clearRect(0,0,canvas.width,canvas.height);
+			ctx.drawImage(spriteAnimation,frameWidth*currentFrame++,0,frameWidth,frameHeight,20,20,frameWidth,frameHeight);
+			if(currentFrame>=totalFrames)currentFrame=0;
+			
+	}
+	function update(){
+		currentTime=Date.now();
+		if(previousTime==0)previousTime=Date.now();
+		delTime+=currentTime-previousTime;
+		previousTime=currentTime;
+		
+			
+			if(delTime>1000/fps){
+				draw();
+				delTime=0;
+			}
+		window.requestAnimationFrame(update);
+		}
+		update();
+	}
+	img.onload=main();
+	
+	</script>
+</body>
+</html>
