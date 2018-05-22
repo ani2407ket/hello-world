@@ -1,2 +1,3 @@
 # hello-world
-beginning git hub
+changing the text to see how branching and commits works in github.
+
